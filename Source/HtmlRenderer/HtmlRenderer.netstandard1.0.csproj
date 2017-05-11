@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
+    <RootNamespace>TheArtOfDev.HtmlRenderer</RootNamespace>
+    <AssemblyName>HtmlRenderer</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <CustomSymbols>NETSTANDARD1_0;netstandard</CustomSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\netstandard1.0\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;$(CustomSymbols)</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\netstandard1.0\</OutputPath>
+    <DefineConstants>TRACE;$(CustomSymbols)</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Target Name="BeforeBuild">
+    <!-- Ensure the correct dotnet version for this project is made present before the build process starts. -->
+    <Exec Command="dotnet restore $(ProjectName)$(ProjectExt)" />
+  </Target>
+  <Target Name="AfterBuild">
+    <!-- Clean up the obj directory, as it prevents non-netstandard projects to fail during builds from Visual Studio. -->
+    <RemoveDir Directories="$(ProjectDir)\obj" />
+  </Target>
+</Project>
