@@ -58,7 +58,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         {
             ArgChecker.AssertArgNotNull(adapter, "global");
 
-            _valueParser = new CssValueParser(adapter);
+            _valueParser = new CssValueParser();
             _adapter = adapter;
         }
 
@@ -132,7 +132,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         /// <returns>color value</returns>
         public RColor ParseColor(string colorStr)
         {
-            return _valueParser.GetActualColor(colorStr);
+            return _valueParser.GetActualColor(_adapter, colorStr);
         }
 
 
@@ -529,7 +529,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         /// <param name="properties">the properties collection to add to</param>
         private void ParseColorProperty(string propName, string propValue, Dictionary<string, string> properties)
         {
-            if (_valueParser.IsColorValid(propValue))
+            if (_valueParser.IsColorValid(_adapter, propValue))
             {
                 properties[propName] = propValue;
             }
@@ -956,7 +956,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         private string ParseBorderColor(string str, int idx, int length)
         {
             RColor color;
-            return _valueParser.TryGetColor(str, idx, length, out color) ? str.Substring(idx, length) : null;
+            return _valueParser.TryGetColor(_adapter, str, idx, length, out color) ? str.Substring(idx, length) : null;
         }
 
         #endregion

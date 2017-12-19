@@ -24,24 +24,11 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
     /// </summary>
     internal sealed class CssValueParser
     {
-        #region Fields and Consts
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly RAdapter _adapter;
-
-        #endregion
-
-
         /// <summary>
         /// Init.
         /// </summary>
-        public CssValueParser(RAdapter adapter)
+        public CssValueParser()
         {
-            ArgChecker.AssertArgNotNull(adapter, "global");
-
-            _adapter = adapter;
         }
 
         /// <summary>
@@ -274,10 +261,10 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         /// </summary>
         /// <param name="colorValue">color string value to parse</param>
         /// <returns>true - valid, false - invalid</returns>
-        public bool IsColorValid(string colorValue)
+        public bool IsColorValid(RAdapter adapter, string colorValue)
         {
             RColor color;
-            return TryGetColor(colorValue, 0, colorValue.Length, out color);
+            return TryGetColor(adapter, colorValue, 0, colorValue.Length, out color);
         }
 
         /// <summary>
@@ -285,10 +272,10 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         /// </summary>
         /// <param name="colorValue">color string value to parse</param>
         /// <returns>Color value</returns>
-        public RColor GetActualColor(string colorValue)
+        public RColor GetActualColor(RAdapter adapter, string colorValue)
         {
             RColor color;
-            TryGetColor(colorValue, 0, colorValue.Length, out color);
+            TryGetColor(adapter, colorValue, 0, colorValue.Length, out color);
             return color;
         }
 
@@ -300,8 +287,9 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         /// <param name="length">substring length</param>
         /// <param name="color">return the parsed color</param>
         /// <returns>true - valid color, false - otherwise</returns>
-        public bool TryGetColor(string str, int idx, int length, out RColor color)
+        public bool TryGetColor(RAdapter adapter, string str, int idx, int length, out RColor color)
         {
+            ArgChecker.AssertArgNotNull(adapter, "global");
             try
             {
                 if (!string.IsNullOrEmpty(str))
@@ -320,7 +308,7 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
                     }
                     else
                     {
-                        return GetColorByName(str, idx, length, out color);
+                        return GetColorByName(adapter, str, idx, length, out color);
                     }
                 }
             }
@@ -468,9 +456,9 @@ namespace TheArtOfDev.HtmlRenderer.Core.Parse
         /// Get color by given name, including .NET name.
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private bool GetColorByName(string str, int idx, int length, out RColor color)
+        private bool GetColorByName(RAdapter adapter, string str, int idx, int length, out RColor color)
         {
-            color = _adapter.GetColor(str.Substring(idx, length));
+            color = adapter.GetColor(str.Substring(idx, length));
             return color.A > 0;
         }
 
